@@ -5,6 +5,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface IJokeService {
-     @GET("api")
+     @GET("slack")
      fun getJokes(@Query("format") format:String ): Call<JokesApiService>
 }

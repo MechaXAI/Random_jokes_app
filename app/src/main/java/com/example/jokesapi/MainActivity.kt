@@ -12,10 +12,12 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+// https://github.com/sameerkumar18/geek-joke-api
+// https://geek-jokes.sameerkumar.website/api?format=json
 class MainActivity : AppCompatActivity() {
 
     // lateinit var jokes: ArrayList<Jokes>
-    var pos = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,17 +30,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadJokes(){
+        val baseUrl="https://icanhazdadjoke.com/"
         val tvJoke = findViewById<TextView>(R.id.tvJoke)
         // tvJoke.text = "Broma encontrada!!!"
         // 1. Create an instance of retrofit
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://geek-jokes.sameerkumar.website/")
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         // 2. Create an instance of the interface
-        val jokeService : IJokeService
-        jokeService = retrofit.create(IJokeService::class.java)
+        val jokeService : IJokeService = retrofit.create(IJokeService::class.java)
 
         // 3. Create a variable y trough the interface  assign the fun
         val request = jokeService.getJokes("json")
@@ -50,12 +52,12 @@ class MainActivity : AppCompatActivity() {
                 response: Response<JokesApiService>
             ) {
                 if(response.isSuccessful) {
-                    tvJoke.text = response.body()!!.joke // assign !!
+                    tvJoke.text = response.body()!!.attachments[0].text // assign !!
                 }
             }
 
             override fun onFailure(call: Call<JokesApiService>, t: Throwable) {
-                TODO("Not yet implemented")
+                println("ERROR")
             }
 
         })
